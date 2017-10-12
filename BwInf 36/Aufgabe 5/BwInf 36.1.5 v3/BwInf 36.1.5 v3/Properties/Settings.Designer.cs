@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BwInf_36._1._5_v3.Properties
+namespace BwInf.Properties
 {
 
 

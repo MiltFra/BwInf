@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BwInf_36._1._5_v3
+namespace BwInf
 {
     public class Move
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace BwInf_36._1._5_v3
+namespace BwInf
 {
     public class Grid
     {
@@ -99,7 +99,7 @@ namespace BwInf_36._1._5_v3
             get { return varValues.GetLength(1); }
         }
 
-        private int MoveCount = 0;
+        protected int MoveCount = 0;
 
         public (int y, int x) Size
         {
@@ -167,11 +167,28 @@ namespace BwInf_36._1._5_v3
 
         public (string move, bool successful) Move(Move move)
         {
-            (string direction, int distance) moveDetails = MoveDetails(move);
-
-            int startValue = this.Values[move.Start.y, move.Start.x];
-            int targetValue = this.Values[move.Target.y, move.Target.x];
             int[,] tempValues = (int[,])this.Values.Clone();
+            (string direction, int distance) moveDetails = MoveDetails(move);
+            if (move.Start.y == -1 && move.Start.x == -1 && move.Target.y >= 0 && move.Target.x >= 0 && move.Target.y < 8 && move.Target.x < 8 && this.Values[move.Target.y, move.Target.x] == 0)
+            {
+                if (MoveCount == 0)
+                {
+                    tempValues[move.Target.y, move.Target.x] = 2;
+                    this.Values = (int[,])tempValues.Clone();
+                    MoveCount++;
+                    return ("[---Placed----]: Enemy", true);
+                }
+                else
+                {
+                    return ("invalid", false);
+                }
+            }
+            else if (move.Start.y < 0 || move.Start.x < 0 || move.Target.y < 0 || move.Target.x < 0 || move.Start.y > 7 || move.Start.x > 7 || move.Target.y > 7 || move.Target.x > 7)
+            {
+                return ("invalid", false);
+            }
+            int startValue = this.Values[move.Start.y, move.Start.x];
+            int targetValue = this.Values[move.Target.y, move.Target.x];            
             if (PathBlocked(move))
             {
                 return ("There's something in the way", false);

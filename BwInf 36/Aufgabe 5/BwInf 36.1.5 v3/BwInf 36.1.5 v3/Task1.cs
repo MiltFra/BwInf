@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BwInf_36._1._5_v3
+namespace BwInf
 {
     public class Task1 : Grid
     {
@@ -36,7 +36,7 @@ namespace BwInf_36._1._5_v3
         }
 
         public int delay = 0;
-        public List<Move> Moves = new List<_5_v3.Move>();
+        public List<Move> Moves = new List< Move>();
         private string NextTurn = "white";
 
         private (int y, int x) BlackPosition()
@@ -84,7 +84,7 @@ namespace BwInf_36._1._5_v3
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.y; i > 8; i--)
@@ -95,7 +95,7 @@ namespace BwInf_36._1._5_v3
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.x; i < 8; i++)
@@ -106,7 +106,7 @@ namespace BwInf_36._1._5_v3
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new  Move(blackPosition, (blackPosition.y, i)));
                 }
             }
             for (int i = blackPosition.x; i > 8; i--)
@@ -117,7 +117,7 @@ namespace BwInf_36._1._5_v3
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new  Move(blackPosition, (blackPosition.y, i)));
                 }
             }
             return possibleMoves;
@@ -185,30 +185,30 @@ namespace BwInf_36._1._5_v3
                 int x = i % 8;
                 if (y == 0)
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y + 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y + 1, x)));
                 }
                 else if (y == 7)
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y - 1, x)));
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y + 1, x)));
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y + 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y - 1, x)));
                 }
                 if (x == 0)
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y, x + 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y, x + 1)));
                 }
                 else if (x == 7)
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y, x - 1)));
 
                 }
                 else
                 {
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y, x + 1)));
-                    possibleMoves.Add(new _5_v3.Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y, x + 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], (y, x - 1)));
                 }
             }
             return possibleMoves;
@@ -216,21 +216,27 @@ namespace BwInf_36._1._5_v3
 
         private void NextMove()
         {
-
-            if (NextTurn == "white")
+            if (!this.ActiveForm.stop)
             {
-                NextTurn = "black";
-                this.Move(BestWhiteMove());
+                if (NextTurn == "white")
+                {
+                    NextTurn = "black";
+                    Console.WriteLine(this.Move(BestWhiteMove()).move);
+                }
+                else
+                {
+                    NextTurn = "white";
+                    Console.WriteLine(this.Move(BestBlackMove()).move);
+                }
+                if (!this.GameOver)
+                {
+                    System.Threading.Thread.Sleep(delay);
+                    NextMove();
+                }
             }
             else
             {
-                NextTurn = "white";
-                this.Move(BestBlackMove());
-            }
-            if (!this.GameOver)
-            {
-                System.Threading.Thread.Sleep(delay);
-                NextMove();
+                this.ActiveForm.stop = false;
             }
         }
     }

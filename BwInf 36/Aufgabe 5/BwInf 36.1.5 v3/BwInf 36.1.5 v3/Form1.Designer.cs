@@ -1,4 +1,4 @@
-﻿namespace BwInf_36._1._5_v3
+﻿namespace BwInf
 {
     partial class Form1
     {
@@ -31,9 +31,12 @@
             this.pbGrid = new System.Windows.Forms.PictureBox();
             this.bt_Task1 = new System.Windows.Forms.Button();
             this.bt_Test = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.bt_ = new System.Windows.Forms.Button();
+            this.bt_Task4 = new System.Windows.Forms.Button();
+            this.bt_Task3 = new System.Windows.Forms.Button();
             this.bt_Task2 = new System.Windows.Forms.Button();
+            this.tb_delay = new System.Windows.Forms.TextBox();
+            this.lbl_delay = new System.Windows.Forms.Label();
+            this.bt_Stop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,23 +67,23 @@
             this.bt_Test.Text = "Test";
             this.bt_Test.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // bt_Task4
             // 
-            this.button2.Location = new System.Drawing.Point(659, 130);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 33);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Aufgabe 4";
-            this.button2.UseVisualStyleBackColor = true;
+            this.bt_Task4.Location = new System.Drawing.Point(659, 130);
+            this.bt_Task4.Name = "bt_Task4";
+            this.bt_Task4.Size = new System.Drawing.Size(100, 33);
+            this.bt_Task4.TabIndex = 3;
+            this.bt_Task4.Text = "Aufgabe 4";
+            this.bt_Task4.UseVisualStyleBackColor = true;
             // 
-            // bt_
+            // bt_Task3
             // 
-            this.bt_.Location = new System.Drawing.Point(659, 91);
-            this.bt_.Name = "bt_";
-            this.bt_.Size = new System.Drawing.Size(100, 33);
-            this.bt_.TabIndex = 4;
-            this.bt_.Text = "Aufgabe 3";
-            this.bt_.UseVisualStyleBackColor = true;
+            this.bt_Task3.Location = new System.Drawing.Point(659, 91);
+            this.bt_Task3.Name = "bt_Task3";
+            this.bt_Task3.Size = new System.Drawing.Size(100, 33);
+            this.bt_Task3.TabIndex = 4;
+            this.bt_Task3.Text = "Aufgabe 3";
+            this.bt_Task3.UseVisualStyleBackColor = true;
             // 
             // bt_Task2
             // 
@@ -90,15 +93,45 @@
             this.bt_Task2.TabIndex = 5;
             this.bt_Task2.Text = "Aufgabe 2";
             this.bt_Task2.UseVisualStyleBackColor = true;
+            this.bt_Task2.Click += new System.EventHandler(this.bt_Task2_Click);
+            // 
+            // tb_delay
+            // 
+            this.tb_delay.Location = new System.Drawing.Point(659, 225);
+            this.tb_delay.Name = "tb_delay";
+            this.tb_delay.Size = new System.Drawing.Size(100, 20);
+            this.tb_delay.TabIndex = 6;
+            // 
+            // lbl_delay
+            // 
+            this.lbl_delay.AutoSize = true;
+            this.lbl_delay.Location = new System.Drawing.Point(660, 209);
+            this.lbl_delay.Name = "lbl_delay";
+            this.lbl_delay.Size = new System.Drawing.Size(70, 13);
+            this.lbl_delay.TabIndex = 7;
+            this.lbl_delay.Text = "Verzögerung:";
+            // 
+            // bt_Stop
+            // 
+            this.bt_Stop.Location = new System.Drawing.Point(659, 251);
+            this.bt_Stop.Name = "bt_Stop";
+            this.bt_Stop.Size = new System.Drawing.Size(100, 33);
+            this.bt_Stop.TabIndex = 8;
+            this.bt_Stop.Text = "Stop";
+            this.bt_Stop.UseVisualStyleBackColor = true;
+            this.bt_Stop.Click += new System.EventHandler(this.bt_Stop_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(765, 661);
+            this.Controls.Add(this.bt_Stop);
+            this.Controls.Add(this.lbl_delay);
+            this.Controls.Add(this.tb_delay);
             this.Controls.Add(this.bt_Task2);
-            this.Controls.Add(this.bt_);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.bt_Task3);
+            this.Controls.Add(this.bt_Task4);
             this.Controls.Add(this.bt_Test);
             this.Controls.Add(this.bt_Task1);
             this.Controls.Add(this.pbGrid);
@@ -107,6 +140,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -115,9 +149,12 @@
         public System.Windows.Forms.PictureBox pbGrid;
         private System.Windows.Forms.Button bt_Task1;
         private System.Windows.Forms.Button bt_Test;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button bt_;
+        private System.Windows.Forms.Button bt_Task4;
+        private System.Windows.Forms.Button bt_Task3;
         private System.Windows.Forms.Button bt_Task2;
+        private System.Windows.Forms.TextBox tb_delay;
+        private System.Windows.Forms.Label lbl_delay;
+        private System.Windows.Forms.Button bt_Stop;
     }
 }
 

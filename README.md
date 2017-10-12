@@ -10,3 +10,4 @@ http://bwinf.de/bundeswettbewerb
 - take care of triangles that have two or more corners at the same positions in "Aufgabe 4"
 - try another algortihm for the license plate problem
 - save the license plates on the hard drive instead of memory
+- fix GUI in Aufgabe 3

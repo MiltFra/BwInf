@@ -26,7 +26,8 @@ namespace BwInf
                 bt_Test.Enabled = !value;
             }
         }
-        public bool stop = false;
+
+        
 
         public Form1()
         {
@@ -38,6 +39,8 @@ namespace BwInf
         }
         private void bt_Task1_Click(object sender, EventArgs e)
         {
+            Display display = new Display();
+            display.Show();
             Running = true;
             Console.WriteLine("Starte Aufgabe 1 [8 Bauern, 1 Turm]");
             int delay = 0;
@@ -49,11 +52,14 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task1 task = new Task1(this, 8, delay);
+            Task1 task = new Task1(display, 8, delay);
+            display.Dispose();
             Running = false;
         }
         private void bt_Task2_Click(object sender, EventArgs e)
         {
+            Display display = new Display();
+            display.Show();
             Running = true;
             Console.WriteLine("Starte Aufgabe 2 [7 Bauern, 1 Turm]");
             int delay = 0;
@@ -65,13 +71,33 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task2 task = new Task2(this, 7, delay);
+            Task2 task = new Task2(display, 7, delay);
+            display.Dispose();
             Running = false;
         }
 
         private void bt_Stop_Click(object sender, EventArgs e)
         {
-            this.stop = true;
+            //Display.stop = true;
+        }
+
+        private void bt_Task3_Click(object sender, EventArgs e)
+        {
+            Display display = new Display();
+            display.Show();
+            Running = true;
+            Console.WriteLine("Starte Aufgabe 2 [7 Bauern, 1 Turm]");
+            int delay = 0;
+            try
+            {
+                delay = Convert.ToInt32(tb_delay.Text);
+            }
+            catch
+            {
+                delay = 10;
+            }
+            Task3 task = new Task3(display, 7, delay, 7, 2);
+            Running = false;
         }
     }    
 }

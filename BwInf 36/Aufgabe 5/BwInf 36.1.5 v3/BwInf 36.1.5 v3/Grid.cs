@@ -9,7 +9,7 @@ namespace BwInf
 {
     public class Grid
     {
-        public Grid(Form1 activeForm)
+        public Grid(Display activeForm)
         {
             this.ActiveForm = activeForm;
             int[,] values = new int[8, 8];
@@ -39,7 +39,7 @@ namespace BwInf
             this.Values = values;
 
         }
-        public Grid(Form1 activeForm, int[,] values)
+        public Grid(Display activeForm, int[,] values)
         {
             this.ActiveForm = activeForm;
             this.LastValues = new int[8, 8];
@@ -62,8 +62,8 @@ namespace BwInf
             this.Values = values;
         }
 
-        private Form1 varActiveForm;
-        public Form1 ActiveForm
+        private Display varActiveForm;
+        public Display ActiveForm
         {
             get { return varActiveForm; }
             set
@@ -144,7 +144,7 @@ namespace BwInf
                 }
             }
             this.LastValues = this.Values;
-            this.ActiveForm.Update();
+            this.ActiveForm.pbGrid.Update();
         }
         private void UpdateSingleSpot(int Y, int X)
         {
@@ -252,7 +252,11 @@ namespace BwInf
         }
         private (string direction, int distance) MoveDetails(Move move)
         {
-            if (move.Start.x == move.Target.x && move.Start.y != move.Target.y)
+            if (move.Start.x == move.Target.x && move.Start.y == move.Target.y)
+            {
+                return ("none", 0);
+            }
+            else if (move.Start.x == move.Target.x && move.Start.y != move.Target.y)
             {
                 return ("vertical", Math.Abs(move.Start.y - move.Target.y));
             }
@@ -273,6 +277,7 @@ namespace BwInf
         {
             (string direction, int distance) moveDetails = MoveDetails(move);
             if (moveDetails.direction == "invalid") { return false; }
+            if (moveDetails.distance == 0) { return false; }
             int SignY = 0;
             int SignX = 0;
             if (move.Start.x > move.Target.x)

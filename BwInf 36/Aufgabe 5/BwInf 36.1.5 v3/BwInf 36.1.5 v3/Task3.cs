@@ -6,35 +6,34 @@ using System.Threading.Tasks;
 
 namespace BwInf
 {
-    public class Task2 : Grid
+    public class Task3 : Grid
     {
-        public Task2(Display activeForm, int pawnCount, int delay) : base(activeForm)
+        public Task3(Display activeForm, int pawnCount, int delay, int k, int l) : base(activeForm)
         {
             int[,] values = new int[8, 8];
             for (int i = 0; i < 64; i++)
             {
                 int y = i / 8;
                 int x = i % 8;
-                if (pawnCount <= 0)
-                {
-                    values[y, x] = 0;
-                }
-                else if (y == 0)
+                if (x % 2 == 0 + y % 2 && k > 0)
                 {
                     values[y, x] = 1;
-                    pawnCount--;
+                    k--;
                 }
                 else
                 {
                     values[y, x] = 0;
                 }
             }
-            this.Values = (int[,])values.Clone();
+            this.Values = values;
             this.delay = delay;
-            NextMove();
+            this.k = k;
+            this.l = l;
+            NextMove(0);
         }
-
-        public int delay = 0;
+        public int k { get; set; }
+        public int l { get; set; }
+        public int delay { get; set; }
         public List<Move> Moves = new List<Move>();
         private string NextTurn = "black";
 
@@ -185,7 +184,10 @@ namespace BwInf
                     {
                         if ((move.Target.y == position.y || move.Target.x == position.x) && this.Values[move.Target.y, move.Target.x] != 1)
                         {
-                            return move;
+                            if (stillPossible(move))
+                            {
+                                return move;
+                            }
                         }
                     }
                 }
@@ -248,7 +250,7 @@ namespace BwInf
             for (int i = 0; i < whitePositions.Count(); i++)
             {
                 Move currentCandidate = new Move(whitePositions[i], (whitePositions[i].y + 1 * Math.Sign(blackPosition.y - whitePositions[i].y), whitePositions[i].x));
-                foreach(Move move in possibleMoves)
+                foreach (Move move in possibleMoves)
                 {
                     if (move == currentCandidate)
                     {
@@ -256,7 +258,16 @@ namespace BwInf
                     }
                 }
             }
-            return possibleMoves[0];
+            int possible = 0;
+            for (int i = 0; i < possibleMoves.Count(); i++)
+            {
+                if (stillPossible(possibleMoves[i]))
+                {
+                    possible = i;
+                    break;
+                }
+            }
+            return possibleMoves[possible];
         }
         private List<Move> PossibleWhiteMoves()
         {
@@ -296,25 +307,40 @@ namespace BwInf
             }
             return possibleMoves;
         }
+        private bool stillPossible(Move move)
+        {
+            foreach ((int y, int x) m in this.moved)
+            {
+                if (move.Start.x == m.x && move.Start.y == m.y)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private int moves = 0;
-        private void NextMove()
+        public List<(int y, int x)> moved = new List<(int y, int x)>();
+        private void NextMove(int l)
         {
-            if (NextTurn == "white")
+            if (l > 0)
             {
-                NextTurn = "black";
-                Console.WriteLine(this.Move(BestWhiteMove()).move);
+                l--;
+                Move bestWhiteMove = BestWhiteMove();
+                Console.WriteLine(this.Move(bestWhiteMove).move);
+                moved.Add(bestWhiteMove.Target);
             }
             else
             {
-                NextTurn = "white";
+                l = this.l;
                 Console.WriteLine(this.Move(BestBlackMove()).move);
+                moved = new List<(int y, int x)>();
             }
             if (!this.GameOver)
             {
                 System.Threading.Thread.Sleep(delay);
                 moves++;
-                NextMove();
+                NextMove(l);
             }
         }
     }

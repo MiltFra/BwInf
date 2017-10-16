@@ -8,7 +8,7 @@ namespace BwInf
 {
     public class Task1 : Grid
     {
-        public Task1(Form1 activeForm, int pawnCount, int delay) : base(activeForm)
+        public Task1(Display activeForm, int pawnCount, int delay) : base(activeForm)
         {
             int[,] values = new int[8, 8];
             Random rnd = new Random();

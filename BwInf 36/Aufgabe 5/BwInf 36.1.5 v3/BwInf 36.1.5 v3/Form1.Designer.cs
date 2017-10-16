@@ -84,6 +84,7 @@
             this.bt_Task3.TabIndex = 4;
             this.bt_Task3.Text = "Aufgabe 3";
             this.bt_Task3.UseVisualStyleBackColor = true;
+            this.bt_Task3.Click += new System.EventHandler(this.bt_Task3_Click);
             // 
             // bt_Task2
             // 

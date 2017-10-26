@@ -50,9 +50,9 @@ namespace BwInf
         }
         private Move BestBlackMove()
         {
-            List<(int y, int x)> idealPositions = IdealBlackPositions();
             (int y, int x) blackPosition = BlackPosition();
             List<Move> possibleMoves = PossibleBlackMoves();
+            List<(int y, int x)> idealPositions = IdealBlackPositions();
             if (blackPosition.y < 0)
             {
                 if (idealPositions.Count() == 0)
@@ -72,7 +72,44 @@ namespace BwInf
                     }
                 }
             }
-            return possibleMoves[0];
+            List<(int y, int x)> halfIdealPositions = HalfIdealBlackPositions();
+            foreach (Move move in possibleMoves)
+            {
+                foreach ((int y, int x) position in halfIdealPositions)
+                {
+                    if (move.Target.y == position.y && move.Target.x == position.x)
+                    {
+                        return move;
+                    }
+                }
+            }
+            (int index, int distance) best = (0, 0);
+            List<(int y, int x)> whitePositions = WhitePositions();
+            for (int i = 0; i < possibleMoves.Count(); i++)
+            {
+                int shortest = -1;
+                foreach ((int y, int x) pos in whitePositions)
+                {
+                    int currentDist = this.distance(pos, possibleMoves[i].Target);
+                    if (shortest < 0)
+                    {
+                        shortest = currentDist;
+                    }
+                    else if (currentDist < shortest)
+                    {
+                        shortest = currentDist;
+                    }
+                }
+                if (shortest < 0)
+                {
+                    best = (i, shortest);
+                }
+                if (shortest > best.distance)
+                {
+                    best = (i, shortest);
+                }
+            }
+            return possibleMoves[best.index];
         }
         private List<Move> PossibleBlackMoves()
         {
@@ -154,7 +191,46 @@ namespace BwInf
                         total.Add((y, x));
                     }
                 }
-
+            }
+            return total;
+        }
+        private List<(int y, int x)> HalfIdealBlackPositions()
+        {
+            List<(int y, int x)> total = new List<(int y, int x)>();
+            int[] emptyInX = new int[8];
+            int[] emptyInY = new int[8];
+            for (int i = 0; i < 64; i++)
+            {
+                int y = i / 8;
+                int x = i % 8;
+                if (this.Values[y, x] != 1)
+                {
+                    emptyInX[x]++;
+                    emptyInY[y]++;
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                if (emptyInX[i] == 8)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        total.Add((j, i));
+                    }
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                if (emptyInY[i] == 8)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (emptyInX[j] < 8)
+                        {
+                            total.Add((j, i));
+                        }
+                    }
+                }
             }
             return total;
         }
@@ -170,6 +246,19 @@ namespace BwInf
                 }
             }
             return total;
+        }
+        private (int index, int distance) BiggestDistance(List<(int y, int x)> whitePositions, (int y, int x) blackPosition)
+        {
+            (int index, int distance) furthest = (-1, -1);
+            for (int i = 0; i < whitePositions.Count(); i++)
+            {
+                int currentDistance = this.distance(blackPosition, whitePositions[i]);
+                if (furthest.distance < currentDistance || furthest.index < 0)
+                {
+                    furthest = (i, currentDistance);
+                }
+            }
+            return furthest;
         }
         private Move BestWhiteMove()
         {
@@ -192,82 +281,94 @@ namespace BwInf
                     }
                 }
             }
-            int last = -1;
-            int first = -1;
             List<(int y, int x)> whitePositions = WhitePositions();
-            for (int i = 0; i < whitePositions.Count(); i++)
+            while (whitePositions.Count() > 0)
             {
-                bool lastMovePossible = false;
-                bool firstMovePossible = false;
-                //checking wether i is candidate for first / last based on move possibilities
-                foreach (Move move in possibleMoves)
+                (int index, int distance) furthest = BiggestDistance(whitePositions, blackPosition);
+                (bool possible, List<Move> steps) path = BestPath(whitePositions[furthest.index], blackPosition);
+                if (path.possible && stillPossible(path.steps[0]))
                 {
-                    if (move == new Move(whitePositions[i], (whitePositions[i].y - 1, whitePositions[i].x)))
-                    {
-                        firstMovePossible = true;
-                    }
-                    if (move == new Move(whitePositions[i], (whitePositions[i].y + 1, whitePositions[i].x)))
-                    {
-                        lastMovePossible = true;
-                    }
-                    if (firstMovePossible && lastMovePossible)
-                    {
-                        break;
-                    }
+                    return path.steps[0];
                 }
-                if (!lastMovePossible) { }
-                else if (last < 0 || last > 7)
-                {
-                    last = i;
-                }
-                else if (whitePositions[last].y < whitePositions[i].y)
-                {
-                    last = i;
-                }
-                if (!firstMovePossible) { }
-                else if (first < 0 || first > 7)
-                {
-                    last = i;
-                }
-                else if (whitePositions[first].y > whitePositions[i].y)
-                {
-                    first = i;
-                }
+                whitePositions.RemoveAt(furthest.index);
             }
-            // in front of all pawns
-            if (first < 0 || first > 7) { }
-            else if (whitePositions[first].y > blackPosition.y)
-            {
-                return new Move(whitePositions[first], (whitePositions[first].y - 1, whitePositions[first].x));
-            }
-            // after all pawns
-            if (last < 0 || first > 7) { }
-            else if (whitePositions[last].y < blackPosition.y)
-            {
-                return new Move(whitePositions[last], (whitePositions[last].y + 1, whitePositions[last].x));
-            }
-            // in between the pawns
-            for (int i = 0; i < whitePositions.Count(); i++)
-            {
-                Move currentCandidate = new Move(whitePositions[i], (whitePositions[i].y + 1 * Math.Sign(blackPosition.y - whitePositions[i].y), whitePositions[i].x));
-                foreach (Move move in possibleMoves)
-                {
-                    if (move == currentCandidate)
-                    {
-                        return move;
-                    }
-                }
-            }
-            int possible = 0;
-            for (int i = 0; i < possibleMoves.Count(); i++)
-            {
-                if (stillPossible(possibleMoves[i]))
-                {
-                    possible = i;
-                    break;
-                }
-            }
-            return possibleMoves[possible];
+            return possibleMoves[0];
+
+            //int first = -1;
+            //for (int i = 0; i < whitePositions.Count(); i++)
+            //{
+            //    bool lastMovePossible = false;
+            //    bool firstMovePossible = false;
+            //    //checking wether i is candidate for first / last based on move possibilities
+            //    foreach (Move move in possibleMoves)
+            //    {
+            //        if (move == new Move(whitePositions[i], (whitePositions[i].y - 1, whitePositions[i].x)))
+            //        {
+            //            firstMovePossible = true;
+            //        }
+            //        if (move == new Move(whitePositions[i], (whitePositions[i].y + 1, whitePositions[i].x)))
+            //        {
+            //            lastMovePossible = true;
+            //        }
+            //        if (firstMovePossible && lastMovePossible)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    if (!lastMovePossible) { }
+            //    else if (last < 0 || last > 7)
+            //    {
+            //        last = i;
+            //    }
+            //    else if (whitePositions[last].y < whitePositions[i].y)
+            //    {
+            //        last = i;
+            //    }
+            //    if (!firstMovePossible) { }
+            //    else if (first < 0 || first > 7)
+            //    {
+            //        last = i;
+            //    }
+            //    else if (whitePositions[first].y > whitePositions[i].y)
+            //    {
+            //        first = i;
+            //    }
+            //}
+            //// in front of all pawns
+            //if (first < 0 || first > 7) { }
+            //else if (whitePositions[first].y > blackPosition.y)
+            //{
+            //    return new Move(whitePositions[first], (whitePositions[first].y - 1, whitePositions[first].x));
+            //}
+            //// after all pawns
+            //if (last < 0 || first > 7) { }
+            //else if (whitePositions[last].y < blackPosition.y)
+            //{
+            //    return new Move(whitePositions[last], (whitePositions[last].y + 1, whitePositions[last].x));
+            //}
+            //// in between the pawns
+            //for (int i = 0; i < whitePositions.Count(); i++)
+            //{
+            //    Move currentCandidate = new Move(whitePositions[i], (whitePositions[i].y + 1 * Math.Sign(blackPosition.y - whitePositions[i].y), whitePositions[i].x));
+            //    foreach (Move move in possibleMoves)
+            //    {
+            //        if (move == currentCandidate)
+            //        {
+            //            return move;
+            //        }
+            //    }
+            //}
+
+            //int possible = 0;
+            //for (int i = 0; i < possibleMoves.Count(); i++)
+            //{
+            //    if (stillPossible(possibleMoves[i]))
+            //    {
+            //        possible = i;
+            //        break;
+            //    }
+            //}
+            //return possibleMoves[possible];
         }
         private List<Move> PossibleWhiteMoves()
         {
@@ -318,7 +419,113 @@ namespace BwInf
             }
             return true;
         }
+        private (bool possible, List<Move> steps)[,] foundPaths { get; set; }
+        private bool[,] inCheck { get; set; }
+        private (bool possible, List<Move> steps) BestPath((int y, int x) start, (int y, int x) target)
+        {
+            if (start.y == target.y && start.x == target.x)
+            {
+                List<Move> single = new List<BwInf.Move>();
+                single.Add(new BwInf.Move(start, target));
+                return (true, single);
+            }
+            Pathfinder varPathfinder = new Pathfinder(this.Values, start, target);
+            List<(int y, int x)> path = varPathfinder.findPath();
+            if (path.Count() == 0)
+            {
+                return (false, new List<Move>());
+            }
+            List<Move> total = new List<Move>();
+            for (int i = 0; i < path.Count() - 1; i++)
+            {
+                Move currentStep = new BwInf.Move(path[i], path[i + 1]);
+                total.Add(currentStep);
+            }
+            return (true, total);
+        }
+        private (bool possible, List<Move> steps) findBestPath((int y, int x) start, (int y, int x) target)
+        {
+            this.setActive(target);
+            inCheck[start.y, start.x] = true;
+            try
+            {
+                if (foundPaths[start.y, start.x].steps.Count() != 0)
+                {
+                    return foundPaths[start.y, start.x];
+                }
+            }
+            catch (ArgumentNullException) { }
+            if (this.distance(start, target) < 2)
+            {
+                List<Move> steps = new List<BwInf.Move>();
+                steps.Add(new BwInf.Move(start, target));
+                foundPaths[start.y, start.x] = (true, steps);
+                return (true, steps);
+            }
 
+            (bool possible, List<Move> steps) shortest = (false, new List<Move>());
+            if (start.y + 1 <= 7)
+            {
+                if (!inCheck[start.y + 1, start.x])
+                {
+                    (bool possible, List<Move> steps) current = findBestPath((start.y + 1, start.x), target);
+                    Move oneStep = new BwInf.Move(start, (start.y + 1, start.x));
+                    if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
+                    {
+                        shortest = (true, new List<Move>());
+                        shortest.steps.Add(oneStep);
+                        shortest.steps.AddRange(current.steps);
+                    }
+                }
+            }
+            if (start.y - 1 >= 0)
+            {
+                if (!inCheck[start.y - 1, start.x])
+                {
+                    (bool possible, List<Move> steps) current = findBestPath((start.y - 1, start.x), target);
+                    Move oneStep = new BwInf.Move(start, (start.y - 1, start.x));
+                    if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
+                    {
+                        shortest = (true, new List<Move>());
+                        shortest.steps.Add(oneStep);
+                        shortest.steps.AddRange(current.steps);
+                    }
+                }
+            }
+            if (start.x + 1 <= 7)
+            {
+                if (!inCheck[start.y, start.x + 1])
+                {
+                    (bool possible, List<Move> steps) current = findBestPath((start.y, start.x + 1), target);
+                    Move oneStep = new BwInf.Move(start, (start.y, start.x + 1));
+                    if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
+                    {
+                        shortest = (true, new List<Move>());
+                        shortest.steps.Add(oneStep);
+                        shortest.steps.AddRange(current.steps);
+                    }
+                }
+            }
+            if (start.x - 1 >= 0)
+            {
+                if (!inCheck[start.y, start.x - 1])
+                {
+                    (bool possible, List<Move> steps) current = findBestPath((start.y, start.x - 1), target);
+                    Move oneStep = new BwInf.Move(start, (start.y, start.x - 1));
+                    if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
+                    {
+                        shortest = (true, new List<Move>());
+                        shortest.steps.Add(oneStep);
+                        shortest.steps.AddRange(current.steps);
+                    }
+                }
+            }
+            foundPaths[start.y, start.x] = shortest;
+            inCheck[start.y, start.x] = false;
+            this.setActive((-1, -1));
+            return shortest;
+
+        }
         private int moves = 0;
         public List<(int y, int x)> moved = new List<(int y, int x)>();
         private void NextMove(int l)

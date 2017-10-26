@@ -66,6 +66,7 @@
             this.bt_Test.TabIndex = 2;
             this.bt_Test.Text = "Test";
             this.bt_Test.UseVisualStyleBackColor = true;
+            this.bt_Test.Click += new System.EventHandler(this.bt_Test_Click);
             // 
             // bt_Task4
             // 

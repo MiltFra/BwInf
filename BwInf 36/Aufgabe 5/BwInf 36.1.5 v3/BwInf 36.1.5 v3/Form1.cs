@@ -27,7 +27,7 @@ namespace BwInf
             }
         }
 
-        
+
 
         public Form1()
         {
@@ -35,7 +35,7 @@ namespace BwInf
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-                        
+
         }
         private void bt_Task1_Click(object sender, EventArgs e)
         {
@@ -99,5 +99,21 @@ namespace BwInf
             Task3 task = new Task3(display, 7, delay, 7, 2);
             Running = false;
         }
-    }    
+
+        private void bt_Test_Click(object sender, EventArgs e)
+        {
+            Pathfinder pf = new Pathfinder(
+                new int[8, 8] {
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 },
+                    { 0, 0, 0, 0, 0, 0, 0, 0 } },
+                (0, 0), (7, 7));
+            List<(int y, int x)> path = pf.findPath();
+        }
+    }
 }

@@ -35,7 +35,7 @@ namespace BwInf
                 }
             }
             this.ActiveForm.pbGrid.Image = bmp;
-            this.Colors = new Color[3] { Color.Gray, Color.White, Color.Black };
+            this.Colors = new Color[5] { Color.Gray, Color.White, Color.Black, Color.Blue, Color.Red };
             this.Values = values;
 
         }
@@ -70,6 +70,13 @@ namespace BwInf
             {
                 varActiveForm = value;
             }
+        }
+
+        private (int y, int x) varActiveSpot = (-1, -1);
+        public (int y, int x) ActiveSpot
+        {
+            get { return varActiveSpot; }
+            set { varActiveSpot = value; Update(); }
         }
 
         private Color[] varColors;
@@ -151,11 +158,24 @@ namespace BwInf
             (int y, int x) PixelOffset = this.PixelOffset(Y, X);
             (int y, int x) SingleSpotSize = this.SingleSpotSize;
             Bitmap GridImage = new Bitmap(this.ActiveForm.pbGrid.Image);
-            for (int y = 0; y < SingleSpotSize.y; y++)
+            if (Y == this.ActiveSpot.y && X == this.ActiveSpot.x)
             {
-                for (int x = 0; x < SingleSpotSize.x; x++)
+                for (int y = 0; y < SingleSpotSize.y; y++)
                 {
-                    GridImage.SetPixel(PixelOffset.x + x, PixelOffset.y + y, Colors[Values[Y, X]]);
+                    for (int x = 0; x < SingleSpotSize.x; x++)
+                    {
+                        GridImage.SetPixel(PixelOffset.x + x, PixelOffset.y + y, Colors[4]);
+                    }
+                }
+            }
+            else
+            {
+                for (int y = 0; y < SingleSpotSize.y; y++)
+                {
+                    for (int x = 0; x < SingleSpotSize.x; x++)
+                    {
+                        GridImage.SetPixel(PixelOffset.x + x, PixelOffset.y + y, Colors[Values[Y, X]]);
+                    }
                 }
             }
             this.ActiveForm.pbGrid.Image = GridImage;
@@ -164,7 +184,19 @@ namespace BwInf
         {
             return ((this.Size.y / this.Height) * Y, (this.Size.x / this.Width) * X);
         }
+        private (int value, int y, int x) lastActive { get; set; }
+        protected void setActive((int y, int x) spot)
+        {
 
+            this.ActiveSpot = spot;
+
+            //int[,] tempValues = (int[,])this.Values.Clone();
+            //tempValues[lastActive.y, lastActive.x] = lastActive.value;
+            //lastActive = (tempValues[spot.y, spot.x], spot.y, spot.x);
+            //tempValues[spot.y, spot.x] = 4;
+            //this.Values = tempValues;
+
+        }
         public (string move, bool successful) Move(Move move)
         {
             int[,] tempValues = (int[,])this.Values.Clone();
@@ -188,7 +220,7 @@ namespace BwInf
                 return ("invalid", false);
             }
             int startValue = this.Values[move.Start.y, move.Start.x];
-            int targetValue = this.Values[move.Target.y, move.Target.x];            
+            int targetValue = this.Values[move.Target.y, move.Target.x];
             if (PathBlocked(move))
             {
                 return ("There's something in the way", false);
@@ -272,6 +304,12 @@ namespace BwInf
             {
                 return ("invalid", -1);
             }
+        }
+        protected int distance((int y, int x) pos1, (int y, int x) pos2)
+        {
+            int yDif = Math.Abs(pos1.y - pos2.y);
+            int xDif = Math.Abs(pos2.x - pos1.x);
+            return yDif + xDif;
         }
         private bool PathBlocked(Move move)
         {

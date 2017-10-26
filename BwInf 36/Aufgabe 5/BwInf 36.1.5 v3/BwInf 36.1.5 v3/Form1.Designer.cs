@@ -37,6 +37,10 @@
             this.tb_delay = new System.Windows.Forms.TextBox();
             this.lbl_delay = new System.Windows.Forms.Label();
             this.bt_Stop = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +64,7 @@
             // 
             // bt_Test
             // 
-            this.bt_Test.Location = new System.Drawing.Point(659, 169);
+            this.bt_Test.Location = new System.Drawing.Point(659, 620);
             this.bt_Test.Name = "bt_Test";
             this.bt_Test.Size = new System.Drawing.Size(100, 33);
             this.bt_Test.TabIndex = 2;
@@ -70,7 +74,7 @@
             // 
             // bt_Task4
             // 
-            this.bt_Task4.Location = new System.Drawing.Point(659, 130);
+            this.bt_Task4.Location = new System.Drawing.Point(659, 179);
             this.bt_Task4.Name = "bt_Task4";
             this.bt_Task4.Size = new System.Drawing.Size(100, 33);
             this.bt_Task4.TabIndex = 3;
@@ -99,7 +103,7 @@
             // 
             // tb_delay
             // 
-            this.tb_delay.Location = new System.Drawing.Point(659, 225);
+            this.tb_delay.Location = new System.Drawing.Point(659, 510);
             this.tb_delay.Name = "tb_delay";
             this.tb_delay.Size = new System.Drawing.Size(100, 20);
             this.tb_delay.TabIndex = 6;
@@ -107,7 +111,7 @@
             // lbl_delay
             // 
             this.lbl_delay.AutoSize = true;
-            this.lbl_delay.Location = new System.Drawing.Point(660, 209);
+            this.lbl_delay.Location = new System.Drawing.Point(656, 494);
             this.lbl_delay.Name = "lbl_delay";
             this.lbl_delay.Size = new System.Drawing.Size(70, 13);
             this.lbl_delay.TabIndex = 7;
@@ -115,7 +119,7 @@
             // 
             // bt_Stop
             // 
-            this.bt_Stop.Location = new System.Drawing.Point(659, 251);
+            this.bt_Stop.Location = new System.Drawing.Point(659, 536);
             this.bt_Stop.Name = "bt_Stop";
             this.bt_Stop.Size = new System.Drawing.Size(100, 33);
             this.bt_Stop.TabIndex = 8;
@@ -123,11 +127,47 @@
             this.bt_Stop.UseVisualStyleBackColor = true;
             this.bt_Stop.Click += new System.EventHandler(this.bt_Stop_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(686, 131);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(73, 20);
+            this.textBox1.TabIndex = 9;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(686, 157);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(73, 20);
+            this.textBox2.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(656, 134);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(13, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "k";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(656, 160);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(9, 13);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "l";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(765, 661);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.bt_Stop);
             this.Controls.Add(this.lbl_delay);
             this.Controls.Add(this.tb_delay);
@@ -157,6 +197,10 @@
         private System.Windows.Forms.TextBox tb_delay;
         private System.Windows.Forms.Label lbl_delay;
         private System.Windows.Forms.Button bt_Stop;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

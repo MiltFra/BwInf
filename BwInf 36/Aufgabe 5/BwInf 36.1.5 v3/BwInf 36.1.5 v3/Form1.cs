@@ -96,7 +96,7 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task3 task = new Task3(display, 7, delay, 7, 2);
+            Task3 task = new Task3(display, 7, delay, 8, 1);
             Running = false;
         }
 

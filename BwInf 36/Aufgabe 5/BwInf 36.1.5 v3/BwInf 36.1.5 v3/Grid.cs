@@ -282,7 +282,7 @@ namespace BwInf
             }
             return ("", false);
         }
-        private (string direction, int distance) MoveDetails(Move move)
+        protected (string direction, int distance) MoveDetails(Move move)
         {
             if (move.Start.x == move.Target.x && move.Start.y == move.Target.y)
             {

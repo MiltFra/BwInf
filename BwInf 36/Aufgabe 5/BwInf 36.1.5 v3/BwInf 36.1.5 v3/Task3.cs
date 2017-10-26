@@ -165,26 +165,16 @@ namespace BwInf
             }
             return possibleMoves;
         }
+
         private List<(int y, int x)> IdealBlackPositions()
         {
             List<(int y, int x)> total = new List<(int y, int x)>();
-            int[] emptyInX = new int[8];
-            int[] emptyInY = new int[8];
+            (int[] inY, int[] inX) empty = Empty();
             for (int i = 0; i < 64; i++)
             {
                 int y = i / 8;
                 int x = i % 8;
-                if (this.Values[y, x] != 1)
-                {
-                    emptyInX[x]++;
-                    emptyInY[y]++;
-                }
-            }
-            for (int i = 0; i < 64; i++)
-            {
-                int y = i / 8;
-                int x = i % 8;
-                if (emptyInY[y] == 8 && emptyInX[x] == 8)
+                if (empty.inY[y] == 8 && empty.inX[x] == 8)
                 {
                     if (Values[y, Math.Min(x + 1, 7)] != 1 && Values[y, Math.Max(x - 1, 0)] != 1 && Values[Math.Min(y + 1, 7), x] != 1 && Values[Math.Max(y - 1, 0), x] != 1)
                     {
@@ -261,114 +251,152 @@ namespace BwInf
             return furthest;
         }
         private Move BestWhiteMove()
-        {
-            List<(int y, int x)> idealPositions = IdealBlackPositions();
+        {            
             List<Move> possibleMoves = PossibleWhiteMoves();
             (int y, int x) blackPosition = BlackPosition();
+            foreach (Move move in possibleMoves)
+            {
+                if (move.Target.y == blackPosition.y && move.Target.x == blackPosition.x)
+                {
+                    return move; 
+                }
+            }
+            List<(int y, int x)> idealPositions = IdealBlackPositions();            
             foreach ((int y, int x) position in idealPositions)
             {
                 if (position.y == blackPosition.y && position.x == blackPosition.x)
                 {
+                    List<Move> candidates = new List<Move>();
                     foreach (Move move in possibleMoves)
                     {
                         if ((move.Target.y == position.y || move.Target.x == position.x) && this.Values[move.Target.y, move.Target.x] != 1)
                         {
                             if (stillPossible(move))
                             {
-                                return move;
+                                candidates.Add(move);
                             }
                         }
+                    }                    
+                    if (candidates.Count() > 0)
+                    {
+                        (int[] y, int[] x) canBlock = CanBlock();
+                        Move best = candidates[0];
+                        foreach (Move move in candidates)
+                        {
+                            (string direction, int distance) moveDetails = this.MoveDetails(move);
+                            if (moveDetails.direction == "horizontal")
+                            {
+                                if (canBlock.x[move.Target.x] < canBlock.x[best.Target.x])
+                                {
+                                    best = move;
+                                }
+                            }
+                            else if (moveDetails.direction == "vertical")
+                            {
+                                if (canBlock.y[move.Target.y] < canBlock.y[best.Target.y])
+                                {
+                                    best = move;
+                                }
+                            }
+                        }
+                        return best;
                     }
                 }
             }
             List<(int y, int x)> whitePositions = WhitePositions();
+            List<Move> firstSteps = new List<BwInf.Move>();
             while (whitePositions.Count() > 0)
             {
                 (int index, int distance) furthest = BiggestDistance(whitePositions, blackPosition);
                 (bool possible, List<Move> steps) path = BestPath(whitePositions[furthest.index], blackPosition);
                 if (path.possible && stillPossible(path.steps[0]))
                 {
-                    return path.steps[0];
+                    firstSteps.Add(path.steps[0]);
                 }
                 whitePositions.RemoveAt(furthest.index);
             }
-            return possibleMoves[0];
-
-            //int first = -1;
-            //for (int i = 0; i < whitePositions.Count(); i++)
-            //{
-            //    bool lastMovePossible = false;
-            //    bool firstMovePossible = false;
-            //    //checking wether i is candidate for first / last based on move possibilities
-            //    foreach (Move move in possibleMoves)
-            //    {
-            //        if (move == new Move(whitePositions[i], (whitePositions[i].y - 1, whitePositions[i].x)))
-            //        {
-            //            firstMovePossible = true;
-            //        }
-            //        if (move == new Move(whitePositions[i], (whitePositions[i].y + 1, whitePositions[i].x)))
-            //        {
-            //            lastMovePossible = true;
-            //        }
-            //        if (firstMovePossible && lastMovePossible)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    if (!lastMovePossible) { }
-            //    else if (last < 0 || last > 7)
-            //    {
-            //        last = i;
-            //    }
-            //    else if (whitePositions[last].y < whitePositions[i].y)
-            //    {
-            //        last = i;
-            //    }
-            //    if (!firstMovePossible) { }
-            //    else if (first < 0 || first > 7)
-            //    {
-            //        last = i;
-            //    }
-            //    else if (whitePositions[first].y > whitePositions[i].y)
-            //    {
-            //        first = i;
-            //    }
-            //}
-            //// in front of all pawns
-            //if (first < 0 || first > 7) { }
-            //else if (whitePositions[first].y > blackPosition.y)
-            //{
-            //    return new Move(whitePositions[first], (whitePositions[first].y - 1, whitePositions[first].x));
-            //}
-            //// after all pawns
-            //if (last < 0 || first > 7) { }
-            //else if (whitePositions[last].y < blackPosition.y)
-            //{
-            //    return new Move(whitePositions[last], (whitePositions[last].y + 1, whitePositions[last].x));
-            //}
-            //// in between the pawns
-            //for (int i = 0; i < whitePositions.Count(); i++)
-            //{
-            //    Move currentCandidate = new Move(whitePositions[i], (whitePositions[i].y + 1 * Math.Sign(blackPosition.y - whitePositions[i].y), whitePositions[i].x));
-            //    foreach (Move move in possibleMoves)
-            //    {
-            //        if (move == currentCandidate)
-            //        {
-            //            return move;
-            //        }
-            //    }
-            //}
-
-            //int possible = 0;
-            //for (int i = 0; i < possibleMoves.Count(); i++)
-            //{
-            //    if (stillPossible(possibleMoves[i]))
-            //    {
-            //        possible = i;
-            //        break;
-            //    }
-            //}
-            //return possibleMoves[possible];
+            int before = EmptyRowCount();
+            foreach (Move m in firstSteps)
+            {
+                int[,] valuesAfter = (int[,])this.Values.Clone();
+                valuesAfter[m.Start.y, m.Start.x] = 0;
+                valuesAfter[m.Target.y, m.Target.x] = 1;
+                int after = EmptyRowCount(valuesAfter);
+                if (after > before)
+                {
+                    return m;
+                }
+            }
+            if (firstSteps.Count() > 0)
+            {
+                return firstSteps[0];
+            }
+            throw new Exception();
+        }
+        private int EmptyRowCount()
+        {
+            (int[] y, int[] x) empty = Empty();
+            int total = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (empty.y[i] == 0) { total++; }
+            }
+            return total;
+        }
+        private int EmptyRowCount(int[,] values)
+        {
+            (int[] y, int[] x) empty = Empty(values);
+            int total = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                if (empty.y[i] == 0) { total++; }
+            }
+            return total;
+        }
+        private (int[] y, int[] x) CanBlock()
+        {
+            List<(int y, int x)> whitePositions = WhitePositions();
+            (int[] y, int[] x) total = (new int[8], new int[8]);
+            foreach ((int y, int x) position in whitePositions)
+            {
+                try { total.y[position.y + 1]++; } catch (Exception e) { }
+                try { total.y[position.y - 1]++; } catch (Exception e) { }
+                try { total.x[position.x + 1]++; } catch (Exception e) { }
+                try { total.x[position.x - 1]++; } catch (Exception e) { }
+            }
+            return total;
+        }
+        private (int[] inY, int[] inX) Empty()
+        {
+            int[] emptyInX = new int[8];
+            int[] emptyInY = new int[8];
+            for (int i = 0; i < 64; i++)
+            {
+                int y = i / 8;
+                int x = i % 8;
+                if (this.Values[y, x] != 1)
+                {
+                    emptyInX[x]++;
+                    emptyInY[y]++;
+                }
+            }
+            return (emptyInY, emptyInX);
+        }
+        private (int[] inY, int[] inX) Empty(int[,] values)
+        {
+            int[] emptyInX = new int[8];
+            int[] emptyInY = new int[8];
+            for (int i = 0; i < 64; i++)
+            {
+                int y = i / 8;
+                int x = i % 8;
+                if (values[y, x] != 1)
+                {
+                    emptyInX[x]++;
+                    emptyInY[y]++;
+                }
+            }
+            return (emptyInY, emptyInX);
         }
         private List<Move> PossibleWhiteMoves()
         {

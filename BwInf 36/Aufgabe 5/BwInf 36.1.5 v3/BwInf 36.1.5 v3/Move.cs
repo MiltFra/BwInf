@@ -8,9 +8,9 @@ namespace BwInf
 {
     public class Move
     {
-        public (int y, int x) Start { get; set; }
-        public (int y, int x) Target { get; set; }
-        public Move(( int y, int x) start, (int y, int x) target)
+        public  Point Start { get; set; }
+        public  Point Target { get; set; }
+        public Move(Point start,  Point target)
         {
             this.Start = start;
             this.Target = target; 

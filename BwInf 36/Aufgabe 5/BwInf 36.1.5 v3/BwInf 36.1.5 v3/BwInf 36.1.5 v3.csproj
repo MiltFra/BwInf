@@ -66,6 +66,7 @@
     <Compile Include="Grid.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="Pathfinder.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Task1.cs" />

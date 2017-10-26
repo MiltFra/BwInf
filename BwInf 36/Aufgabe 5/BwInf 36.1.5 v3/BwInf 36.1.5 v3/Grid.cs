@@ -72,8 +72,8 @@ namespace BwInf
             }
         }
 
-        private (int y, int x) varActiveSpot = (-1, -1);
-        public (int y, int x) ActiveSpot
+        private Point varActiveSpot = new Point(-1, -1);
+        public Point ActiveSpot
         {
             get { return varActiveSpot; }
             set { varActiveSpot = value; Update(); }
@@ -108,13 +108,13 @@ namespace BwInf
 
         protected int MoveCount = 0;
 
-        public (int y, int x) Size
+        public Point Size
         {
-            get { return (this.ActiveForm.pbGrid.Height, this.ActiveForm.pbGrid.Width); }
+            get { return new Point(this.ActiveForm.pbGrid.Height, this.ActiveForm.pbGrid.Width); }
         }
-        public (int y, int x) SingleSpotSize
+        public Point SingleSpotSize
         {
-            get { return (this.Size.y / Height, this.Size.x / Width); }
+            get { return new Point(this.Size.y / Height, this.Size.x / Width); }
         }
 
         private int[,] LastValues { get; set; }
@@ -145,7 +145,7 @@ namespace BwInf
                     {
                         if (Values[y, x] != LastValues[y, x])
                         {
-                            UpdateSingleSpot(y, x);
+                            UpdateSingleSpot(new Point(y, x));
                         }
                     }
                 }
@@ -153,12 +153,12 @@ namespace BwInf
             this.LastValues = this.Values;
             this.ActiveForm.pbGrid.Update();
         }
-        private void UpdateSingleSpot(int Y, int X)
+        private void UpdateSingleSpot(Point spot)
         {
-            (int y, int x) PixelOffset = this.PixelOffset(Y, X);
-            (int y, int x) SingleSpotSize = this.SingleSpotSize;
+            Point PixelOffset = this.PixelOffset(spot);
+            Point SingleSpotSize = this.SingleSpotSize;
             Bitmap GridImage = new Bitmap(this.ActiveForm.pbGrid.Image);
-            if (Y == this.ActiveSpot.y && X == this.ActiveSpot.x)
+            if (spot.y == this.ActiveSpot.y && spot.x == this.ActiveSpot.x)
             {
                 for (int y = 0; y < SingleSpotSize.y; y++)
                 {
@@ -174,18 +174,18 @@ namespace BwInf
                 {
                     for (int x = 0; x < SingleSpotSize.x; x++)
                     {
-                        GridImage.SetPixel(PixelOffset.x + x, PixelOffset.y + y, Colors[Values[Y, X]]);
+                        GridImage.SetPixel(PixelOffset.x + x, PixelOffset.y + y, Colors[Values[spot.y, spot.x]]);
                     }
                 }
             }
             this.ActiveForm.pbGrid.Image = GridImage;
         }
-        private (int y, int x) PixelOffset(int Y, int X)
+        private Point PixelOffset (Point point)
         {
-            return ((this.Size.y / this.Height) * Y, (this.Size.x / this.Width) * X);
+            return new Point((this.Size.y / this.Height) * point.y, (this.Size.x / this.Width) * point.x);
         }
         private (int value, int y, int x) lastActive { get; set; }
-        protected void setActive((int y, int x) spot)
+        protected void setActive(Point spot)
         {
 
             this.ActiveSpot = spot;
@@ -305,7 +305,7 @@ namespace BwInf
                 return ("invalid", -1);
             }
         }
-        protected int distance((int y, int x) pos1, (int y, int x) pos2)
+        protected int distance(Point pos1, Point pos2)
         {
             int yDif = Math.Abs(pos1.y - pos2.y);
             int xDif = Math.Abs(pos2.x - pos1.x);

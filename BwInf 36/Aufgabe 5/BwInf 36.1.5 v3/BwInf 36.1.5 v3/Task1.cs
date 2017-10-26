@@ -12,7 +12,9 @@ namespace BwInf
         {
             int[,] values = new int[8, 8];
             Random rnd = new Random();
-            (int y, int x) rook = (rnd.Next(2, 7), rnd.Next(0, 7));
+
+
+            Point rook = new Point(rnd.Next(2, 7), rnd.Next(0, 7));
             for (int i = 0; i < 64; i++)
             {
                 int y = i / 8;
@@ -39,21 +41,21 @@ namespace BwInf
         public List<Move> Moves = new List< Move>();
         private string NextTurn = "white";
 
-        private (int y, int x) BlackPosition()
+        private  Point BlackPosition()
         {
             for (int i = 0; i < 64; i++)
             {
                 if (this.Values[i / 8, i % 8] == 2)
                 {
-                    return (i / 8, i % 8);
+                    return new Point(i / 8, i % 8);
                 }
             }
             throw new Exception();
         }
         private Move BestBlackMove()
         {
-            List<(int y, int x)> idealPositions = IdealBlackPositions();
-            (int y, int x) blackPosition = BlackPosition();
+            List< Point> idealPositions = IdealBlackPositions();
+             Point blackPosition = BlackPosition();
             List<Move> possibleMoves = PossibleBlackMoves();
             int best = 0;
             for (int i = 0; i < possibleMoves.Count(); i++)
@@ -62,7 +64,7 @@ namespace BwInf
                 {
                     best = i;
                 }
-                foreach ((int y, int x) id in idealPositions)
+                foreach ( Point id in idealPositions)
                 {
                     if (possibleMoves[i].Target.y == id.y && possibleMoves[i].Target.x == id.x)
                     {
@@ -74,7 +76,7 @@ namespace BwInf
         }        
         private List<Move> PossibleBlackMoves()
         {
-            (int y, int x) blackPosition = BlackPosition();
+             Point blackPosition = BlackPosition();
             List<Move> possibleMoves = new List<Move>();
             for (int i = blackPosition.y; i < 8; i++)
             {
@@ -84,7 +86,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.y; i > 8; i--)
@@ -95,7 +97,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.x; i < 8; i++)
@@ -106,7 +108,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new  Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new  Move(blackPosition, new Point(blackPosition.y, i)));
                 }
             }
             for (int i = blackPosition.x; i > 8; i--)
@@ -117,14 +119,14 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new  Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new  Move(blackPosition, new Point(blackPosition.y, i)));
                 }
             }
             return possibleMoves;
         }
-        private List<(int y, int x)> IdealBlackPositions()
+        private List< Point> IdealBlackPositions()
         {
-            List<(int y, int x)> total = new List<(int y, int x)>();
+            List< Point> total = new List< Point>();
             int[] emptyInX = new int[8];
             int[] emptyInY = new int[8];
             for (int i = 0; i < 64; i++)
@@ -143,21 +145,21 @@ namespace BwInf
                 int x = i % 8;
                 if (emptyInY[y] == 8 && emptyInX[x] == 8)
                 {
-                    total.Add((y, x));
+                    total.Add(new Point(y, x));
                 }
 
             }
             return total;
         }
 
-        private List<(int y, int x)> WhitePositions()
+        private List< Point> WhitePositions()
         {
-            List<(int y, int x)> total = new List<(int y, int x)>();
+            List< Point> total = new List< Point>();
             for (int i = 0; i < 64; i++)
             {
                 if (this.Values[i / 8, i % 8] == 1)
                 {
-                    total.Add((i / 8, i % 8));
+                    total.Add(new Point(i / 8, i % 8));
                 }
             }
             return total;
@@ -165,7 +167,7 @@ namespace BwInf
         private Move BestWhiteMove()
         {
             int last = 0;
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             for (int i = 0; i < whitePositions.Count(); i++)
             {
                 if (whitePositions[last].y > whitePositions[i].y)
@@ -173,11 +175,11 @@ namespace BwInf
                     last = i;
                 }
             }
-            return new Move(whitePositions[last], (whitePositions[last].y + 1, whitePositions[last].x));
+            return new Move(whitePositions[last], new Point(whitePositions[last].y + 1, whitePositions[last].x));
         }
         private List<Move> PossibleWhiteMove()
         {
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             List<Move> possibleMoves = new List<Move>();
             for (int i = 0; i < whitePositions.Count(); i++)
             {
@@ -185,30 +187,30 @@ namespace BwInf
                 int x = i % 8;
                 if (y == 0)
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y + 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y + 1, x)));
                 }
                 else if (y == 7)
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y - 1, x)));
                 }
                 else
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y + 1, x)));
-                    possibleMoves.Add(new  Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y + 1, x)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y - 1, x)));
                 }
                 if (x == 0)
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y, x + 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x + 1)));
                 }
                 else if (x == 7)
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x - 1)));
 
                 }
                 else
                 {
-                    possibleMoves.Add(new  Move(whitePositions[i], (y, x + 1)));
-                    possibleMoves.Add(new  Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x + 1)));
+                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x - 1)));
                 }
             }
             return possibleMoves;

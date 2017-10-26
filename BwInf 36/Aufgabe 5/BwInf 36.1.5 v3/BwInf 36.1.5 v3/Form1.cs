@@ -27,8 +27,6 @@ namespace BwInf
             }
         }
 
-
-
         public Form1()
         {
             InitializeComponent();
@@ -96,7 +94,7 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task3 task = new Task3(display, 7, delay, 8, 1);
+            Task3 task = new Task3(display, 7, delay, 16, 1);
             Running = false;
         }
 
@@ -112,8 +110,8 @@ namespace BwInf
                     { 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0 } },
-                (0, 0), (7, 7));
-            List<(int y, int x)> path = pf.findPath();
+                new Point(0, 0), new Point(7, 7));
+            List< Point> path = pf.findPath();
         }
     }
 }

@@ -37,34 +37,34 @@ namespace BwInf
         public List<Move> Moves = new List<Move>();
         private string NextTurn = "black";
 
-        private (int y, int x) BlackPosition()
+        private  Point BlackPosition()
         {
             for (int i = 0; i < 64; i++)
             {
                 if (this.Values[i / 8, i % 8] == 2)
                 {
-                    return (i / 8, i % 8);
+                    return new Point(i / 8, i % 8);
                 }
             }
-            return (-1, -1);
+            return new Point(-1, -1);
         }
         private Move BestBlackMove()
         {
-            (int y, int x) blackPosition = BlackPosition();
+             Point blackPosition = BlackPosition();
             List<Move> possibleMoves = PossibleBlackMoves();
-            List<(int y, int x)> idealPositions = IdealBlackPositions();
+            List< Point> idealPositions = IdealBlackPositions();
             if (blackPosition.y < 0)
             {
                 if (idealPositions.Count() == 0)
                 {
                     Random rnd = new Random();
-                    return new Move((-1, -1), (rnd.Next(2, 7), rnd.Next(0, 7)));
+                    return new Move(new Point(-1, -1), new Point(rnd.Next(2, 7), rnd.Next(0, 7)));
                 }
-                return new Move((-1, -1), idealPositions[0]);
+                return new Move(new Point(-1, -1), idealPositions[0]);
             }
             foreach (Move move in possibleMoves)
             {
-                foreach ((int y, int x) position in idealPositions)
+                foreach ( Point position in idealPositions)
                 {
                     if (move.Target.y == position.y && move.Target.x == position.x)
                     {
@@ -72,10 +72,10 @@ namespace BwInf
                     }
                 }
             }
-            List<(int y, int x)> halfIdealPositions = HalfIdealBlackPositions();
+            List< Point> halfIdealPositions = HalfIdealBlackPositions();
             foreach (Move move in possibleMoves)
             {
-                foreach ((int y, int x) position in halfIdealPositions)
+                foreach ( Point position in halfIdealPositions)
                 {
                     if (move.Target.y == position.y && move.Target.x == position.x)
                     {
@@ -84,11 +84,11 @@ namespace BwInf
                 }
             }
             (int index, int distance) best = (0, 0);
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             for (int i = 0; i < possibleMoves.Count(); i++)
             {
                 int shortest = -1;
-                foreach ((int y, int x) pos in whitePositions)
+                foreach ( Point pos in whitePositions)
                 {
                     int currentDist = this.distance(pos, possibleMoves[i].Target);
                     if (shortest < 0)
@@ -113,7 +113,7 @@ namespace BwInf
         }
         private List<Move> PossibleBlackMoves()
         {
-            (int y, int x) blackPosition = BlackPosition();
+             Point blackPosition = BlackPosition();
             List<Move> possibleMoves = new List<Move>();
             if (blackPosition.y < 0)
             {
@@ -127,7 +127,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.y; i > -1; i--)
@@ -138,7 +138,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (i, blackPosition.x)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
                 }
             }
             for (int i = blackPosition.x; i < 8; i++)
@@ -149,7 +149,7 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(blackPosition.y, i)));
                 }
             }
             for (int i = blackPosition.x; i > -1; i--)
@@ -160,15 +160,15 @@ namespace BwInf
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(blackPosition, (blackPosition.y, i)));
+                    possibleMoves.Add(new Move(blackPosition, new Point(blackPosition.y, i)));
                 }
             }
             return possibleMoves;
         }
 
-        private List<(int y, int x)> IdealBlackPositions()
+        private List< Point> IdealBlackPositions()
         {
-            List<(int y, int x)> total = new List<(int y, int x)>();
+            List< Point> total = new List< Point>();
             (int[] inY, int[] inX) empty = Empty();
             for (int i = 0; i < 64; i++)
             {
@@ -178,15 +178,15 @@ namespace BwInf
                 {
                     if (Values[y, Math.Min(x + 1, 7)] != 1 && Values[y, Math.Max(x - 1, 0)] != 1 && Values[Math.Min(y + 1, 7), x] != 1 && Values[Math.Max(y - 1, 0), x] != 1)
                     {
-                        total.Add((y, x));
+                        total.Add(new Point(y, x));
                     }
                 }
             }
             return total;
         }
-        private List<(int y, int x)> HalfIdealBlackPositions()
+        private List< Point> HalfIdealBlackPositions()
         {
-            List<(int y, int x)> total = new List<(int y, int x)>();
+            List< Point> total = new List< Point>();
             int[] emptyInX = new int[8];
             int[] emptyInY = new int[8];
             for (int i = 0; i < 64; i++)
@@ -205,7 +205,7 @@ namespace BwInf
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        total.Add((j, i));
+                        total.Add(new Point(j, i));
                     }
                 }
             }
@@ -217,7 +217,7 @@ namespace BwInf
                     {
                         if (emptyInX[j] < 8)
                         {
-                            total.Add((j, i));
+                            total.Add(new Point(j, i));
                         }
                     }
                 }
@@ -225,19 +225,19 @@ namespace BwInf
             return total;
         }
 
-        private List<(int y, int x)> WhitePositions()
+        private List< Point> WhitePositions()
         {
-            List<(int y, int x)> total = new List<(int y, int x)>();
+            List< Point> total = new List< Point>();
             for (int i = 0; i < 64; i++)
             {
                 if (this.Values[i / 8, i % 8] == 1)
                 {
-                    total.Add((i / 8, i % 8));
+                    total.Add(new Point(i / 8, i % 8));
                 }
             }
             return total;
         }
-        private (int index, int distance) BiggestDistance(List<(int y, int x)> whitePositions, (int y, int x) blackPosition)
+        private (int index, int distance) BiggestDistance(List< Point> whitePositions,  Point blackPosition)
         {
             (int index, int distance) furthest = (-1, -1);
             for (int i = 0; i < whitePositions.Count(); i++)
@@ -253,7 +253,7 @@ namespace BwInf
         private Move BestWhiteMove()
         {            
             List<Move> possibleMoves = PossibleWhiteMoves();
-            (int y, int x) blackPosition = BlackPosition();
+             Point blackPosition = BlackPosition();
             foreach (Move move in possibleMoves)
             {
                 if (move.Target.y == blackPosition.y && move.Target.x == blackPosition.x)
@@ -261,8 +261,8 @@ namespace BwInf
                     return move; 
                 }
             }
-            List<(int y, int x)> idealPositions = IdealBlackPositions();            
-            foreach ((int y, int x) position in idealPositions)
+            List< Point> idealPositions = IdealBlackPositions();            
+            foreach ( Point position in idealPositions)
             {
                 if (position.y == blackPosition.y && position.x == blackPosition.x)
                 {
@@ -303,7 +303,7 @@ namespace BwInf
                     }
                 }
             }
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             List<Move> firstSteps = new List<BwInf.Move>();
             while (whitePositions.Count() > 0)
             {
@@ -355,9 +355,9 @@ namespace BwInf
         }
         private (int[] y, int[] x) CanBlock()
         {
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             (int[] y, int[] x) total = (new int[8], new int[8]);
-            foreach ((int y, int x) position in whitePositions)
+            foreach ( Point position in whitePositions)
             {
                 try { total.y[position.y + 1]++; } catch (Exception e) { }
                 try { total.y[position.y - 1]++; } catch (Exception e) { }
@@ -400,7 +400,7 @@ namespace BwInf
         }
         private List<Move> PossibleWhiteMoves()
         {
-            List<(int y, int x)> whitePositions = WhitePositions();
+            List< Point> whitePositions = WhitePositions();
             List<Move> possibleMoves = new List<Move>();
             for (int i = 0; i < whitePositions.Count(); i++)
             {
@@ -408,37 +408,37 @@ namespace BwInf
                 int x = whitePositions[i].x;
                 if (y == 0)
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y + 1, x)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y + 1, x)));
                 }
                 else if (y == 7)
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y - 1, x)));
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y + 1, x)));
-                    possibleMoves.Add(new Move(whitePositions[i], (y - 1, x)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y + 1, x)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y - 1, x)));
                 }
                 if (x == 0)
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y, x + 1)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y, x + 1)));
                 }
                 else if (x == 7)
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y, x - 1)));
 
                 }
                 else
                 {
-                    possibleMoves.Add(new Move(whitePositions[i], (y, x + 1)));
-                    possibleMoves.Add(new Move(whitePositions[i], (y, x - 1)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y, x + 1)));
+                    possibleMoves.Add(new Move(whitePositions[i], new Point(y, x - 1)));
                 }
             }
             return possibleMoves;
         }
         private bool stillPossible(Move move)
         {
-            foreach ((int y, int x) m in this.moved)
+            foreach ( Point m in this.moved)
             {
                 if (move.Start.x == m.x && move.Start.y == m.y)
                 {
@@ -449,7 +449,7 @@ namespace BwInf
         }
         private (bool possible, List<Move> steps)[,] foundPaths { get; set; }
         private bool[,] inCheck { get; set; }
-        private (bool possible, List<Move> steps) BestPath((int y, int x) start, (int y, int x) target)
+        private (bool possible, List<Move> steps) BestPath( Point start,  Point target)
         {
             if (start.y == target.y && start.x == target.x)
             {
@@ -458,7 +458,7 @@ namespace BwInf
                 return (true, single);
             }
             Pathfinder varPathfinder = new Pathfinder(this.Values, start, target);
-            List<(int y, int x)> path = varPathfinder.findPath();
+            List< Point> path = varPathfinder.findPath();
             if (path.Count() == 0)
             {
                 return (false, new List<Move>());
@@ -471,7 +471,7 @@ namespace BwInf
             }
             return (true, total);
         }
-        private (bool possible, List<Move> steps) findBestPath((int y, int x) start, (int y, int x) target)
+        private (bool possible, List<Move> steps) findBestPath( Point start,  Point target)
         {
             this.setActive(target);
             inCheck[start.y, start.x] = true;
@@ -496,8 +496,8 @@ namespace BwInf
             {
                 if (!inCheck[start.y + 1, start.x])
                 {
-                    (bool possible, List<Move> steps) current = findBestPath((start.y + 1, start.x), target);
-                    Move oneStep = new BwInf.Move(start, (start.y + 1, start.x));
+                    (bool possible, List<Move> steps) current = findBestPath(new Point(start.y + 1, start.x), target);
+                    Move oneStep = new BwInf.Move(start, new Point(start.y + 1, start.x));
                     if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
                     {
                         shortest = (true, new List<Move>());
@@ -510,8 +510,8 @@ namespace BwInf
             {
                 if (!inCheck[start.y - 1, start.x])
                 {
-                    (bool possible, List<Move> steps) current = findBestPath((start.y - 1, start.x), target);
-                    Move oneStep = new BwInf.Move(start, (start.y - 1, start.x));
+                    (bool possible, List<Move> steps) current = findBestPath(new Point(start.y - 1, start.x), target);
+                    Move oneStep = new BwInf.Move(start, new Point(start.y - 1, start.x));
                     if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
                     {
                         shortest = (true, new List<Move>());
@@ -524,8 +524,8 @@ namespace BwInf
             {
                 if (!inCheck[start.y, start.x + 1])
                 {
-                    (bool possible, List<Move> steps) current = findBestPath((start.y, start.x + 1), target);
-                    Move oneStep = new BwInf.Move(start, (start.y, start.x + 1));
+                    (bool possible, List<Move> steps) current = findBestPath(new Point(start.y, start.x + 1), target);
+                    Move oneStep = new BwInf.Move(start, new Point(start.y, start.x + 1));
                     if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
                     {
                         shortest = (true, new List<Move>());
@@ -538,8 +538,8 @@ namespace BwInf
             {
                 if (!inCheck[start.y, start.x - 1])
                 {
-                    (bool possible, List<Move> steps) current = findBestPath((start.y, start.x - 1), target);
-                    Move oneStep = new BwInf.Move(start, (start.y, start.x - 1));
+                    (bool possible, List<Move> steps) current = findBestPath(new Point(start.y, start.x - 1), target);
+                    Move oneStep = new BwInf.Move(start, new Point(start.y, start.x - 1));
                     if ((current.possible && current.steps.Count() < shortest.steps.Count()) || !shortest.possible)
                     {
                         shortest = (true, new List<Move>());
@@ -550,12 +550,12 @@ namespace BwInf
             }
             foundPaths[start.y, start.x] = shortest;
             inCheck[start.y, start.x] = false;
-            this.setActive((-1, -1));
+            this.setActive(new Point(-1, -1));
             return shortest;
 
         }
         private int moves = 0;
-        public List<(int y, int x)> moved = new List<(int y, int x)>();
+        public List< Point> moved = new List< Point>();
         private void NextMove(int l)
         {
             if (l > 0)
@@ -569,7 +569,7 @@ namespace BwInf
             {
                 l = this.l;
                 Console.WriteLine(this.Move(BestBlackMove()).move);
-                moved = new List<(int y, int x)>();
+                moved = new List< Point>();
             }
             if (!this.GameOver)
             {

@@ -9,7 +9,7 @@ namespace BwInf
 {
     public class Pathfinder
     {
-        public Pathfinder(int[,] values, (int y, int x) start, (int y, int x) target)
+        public Pathfinder(int[,] values,  Point start,  Point target)
         {
             this.Values = (int[,])values.Clone();
             this.Start = start;
@@ -31,15 +31,15 @@ namespace BwInf
             set { varValues = value; }
         }
 
-        private (int y, int x) varStart;
-        public (int y, int x) Start
+        private  Point varStart;
+        public  Point Start
         {
             get { return varStart; }
             set { varStart = value; }
         }
 
-        private (int y, int x) varTarget;
-        public (int y, int x) Target
+        private  Point varTarget;
+        public  Point Target
         {
             get { return varTarget; }
             set { varTarget = value; }
@@ -63,12 +63,12 @@ namespace BwInf
             }
             this.Distances[Target.y, Target.x] = 0;
             int currentValue = 0;
-            List<(int y, int x)> furthest = new List<(int y, int x)>();
-            furthest.Add((Target.y, Target.x));
+            List< Point> furthest = new List< Point>();
+            furthest.Add(new Point(Target.y, Target.x));
             while (furthest.Count() != 0)
             {
                 bool successful = false;
-                foreach ((int y, int x) f in furthest)
+                foreach ( Point f in furthest)
                 {
                     if (UpdateNeighbours(f, currentValue))
                     {
@@ -80,17 +80,17 @@ namespace BwInf
                     break;
                 }
                 currentValue++;
-                furthest = new List<(int y, int x)>();
+                furthest = new List< Point>();
                 for (int i = 0; i < 64; i++)
                 {
                     if (this.Distances[i / 8, i % 8] == currentValue)
                     {
-                        furthest.Add((i / 8, i % 8));
+                        furthest.Add(new Point(i / 8, i % 8));
                     }
                 }               
             }
         }
-        private bool UpdateNeighbours((int y, int x) spot, int value)
+        private bool UpdateNeighbours( Point spot, int value)
         {
             bool successful = false;
             if (spot.y < 7)
@@ -128,19 +128,19 @@ namespace BwInf
             return successful;
         }
 
-        public List<(int y, int x)> findPath()
+        public List< Point> findPath()
         {
-            List<(int y, int x)> path = new List<(int y, int x)>();
+            List< Point> path = new List< Point>();
             path.Add(this.Start);
-            (int y, int x) spot = getBestNeighbour(this.Start);
+             Point spot = getBestNeighbour(this.Start);
             if (this.Distances[spot.y, spot.x] < 0)
             {
-                return new List<(int y, int x)>();
+                return new List< Point>();
             }
             for (int i = this.Distances[spot.y, spot.x]; i > 0; i--)
             {
                 path.Add(spot);
-                foreach ((int y, int x) n in Neighbours(spot))
+                foreach ( Point n in Neighbours(spot))
                 {
                     if (this.Distances[n.y, n.x] == i - 1)
                     {
@@ -152,32 +152,32 @@ namespace BwInf
             path.Add(this.Target);
             return path;
         }
-        private List<(int y, int x)> Neighbours((int y, int x) spot)
+        private List< Point> Neighbours( Point spot)
         {
-            List<(int y, int x)> neighbours = new List<(int y, int x)>();
+            List< Point> neighbours = new List< Point>();
             if (spot.y < 7)
             {
-                neighbours.Add((spot.y + 1, spot.x));
+                neighbours.Add(new Point(spot.y + 1, spot.x));
             }
             if (spot.y > 0)
             {
-                neighbours.Add((spot.y - 1, spot.x));
+                neighbours.Add(new Point(spot.y - 1, spot.x));
             }
             if (spot.x < 7)
             {
-                neighbours.Add((spot.y, spot.x + 1));
+                neighbours.Add(new Point(spot.y, spot.x + 1));
             }
             if (spot.x > 0)
             {
-                neighbours.Add((spot.y, spot.x - 1));
+                neighbours.Add(new Point(spot.y, spot.x - 1));
             }
             return neighbours;
         }
-        private (int y, int x) getBestNeighbour((int y ,int x) spot)
+        private  Point getBestNeighbour(Point spot)
         {
-            List<(int y, int x)> neighbours = Neighbours(spot);
-            (int y, int x) best = neighbours[0];
-            foreach((int y, int x) n in neighbours)
+            List< Point> neighbours = Neighbours(spot);
+             Point best = neighbours[0];
+            foreach( Point n in neighbours)
             {
                 if (this.Distances[n.y, n.x] < this.Distances[best.y, best.x] && this.Distances[n.y, n.x] > 0)
                 {

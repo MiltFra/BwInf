@@ -6,12 +6,22 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-namespace BwInf_36._1._3
+namespace BwInf
 {
     public class Program
     {
         [STAThread]
         public static void Main(string[] args)
+        {
+            string path = Path();           
+            List<double[][]> triangles = GetTriangles(GetLines(path));     
+            
+            Console.WriteLine();
+            ReturnTriangles(triangles, path);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        private static string Path()
         {
             string path = "";
             OpenFileDialog oFD = new OpenFileDialog();
@@ -21,59 +31,12 @@ namespace BwInf_36._1._3
             }
             Console.WriteLine("The following path was opened: " + path);
             Console.WriteLine();
-            List<cLine> rawLines = getLines(path);
-            List<double[][]> triangles = new List<double[][]>();
-            for (int i = 0; i < rawLines.Count() - 2; i++)
-            {
-                for (int j = i + 1; j < rawLines.Count() - 1; j++)
-                {
-                    for (int k = j + 1; k < rawLines.Count(); k++)
-                    {
-                        cLine[] currentLines = new cLine[3] { rawLines[i], rawLines[j], rawLines[k] };
-                        double[][] currentSharedPoints = new double[3][]
-                        {
-                            currentLines[0].singleSharedPoint(currentLines[1]),
-                            currentLines[0].singleSharedPoint(currentLines[2]),
-                            currentLines[1].singleSharedPoint(currentLines[2])
-                        };
-                        bool validTriangle = true;
-                        foreach (double[] d in currentSharedPoints)
-                        {
-                            if (d.Count() != 2)
-                            {
-                                validTriangle = false;
-                            }
-                        }
-                        
-                        if (validTriangle)
-                        {
-                            if (currentSharedPoints[0][0] == currentSharedPoints[1][0] && currentSharedPoints[0][1] == currentSharedPoints[1][1]) { validTriangle = false; }
-                            if (currentSharedPoints[0][0] == currentSharedPoints[2][0] && currentSharedPoints[0][1] == currentSharedPoints[2][1]) { validTriangle = false; }
-                            if (currentSharedPoints[1][0] == currentSharedPoints[2][0] && currentSharedPoints[1][1] == currentSharedPoints[2][1]) { validTriangle = false; }
-                            if (validTriangle)
-                            {
-                                double[][] triangle = new double[3][]
-                                {
-                                new double[2] { currentSharedPoints[0][0], currentSharedPoints[0][1] },
-                                new double[2] { currentSharedPoints[1][0], currentSharedPoints[1][1] },
-                                new double[2] { currentSharedPoints[2][0], currentSharedPoints[2][1] }
-                                };
-                                triangles.Add(triangle);
-                            }
-                        }
-                    }
-                }
-            }
-            Console.WriteLine();
-            returnTriangles(triangles, path);
-            Console.WriteLine();
-            Console.ReadKey();
-
+            return path;
         }
-        public static List<cLine> getLines(string path)
+        private static List<Line> GetLines(string path)
         {
             StreamReader tempSR = new StreamReader(path);
-            List<cLine> total = new List<cLine>();
+            List<Line> total = new List<Line>();
             int count = Convert.ToInt32(tempSR.ReadLine());
             for (int i = 0; i < count; i++)
             {
@@ -84,13 +47,55 @@ namespace BwInf_36._1._3
                 double y1 = Convert.ToDouble(values[1]);
                 double x2 = Convert.ToDouble(values[2]);
                 double y2 = Convert.ToDouble(values[3]);
-                total.Add(new cLine(x1, y1, x2, y2));
+                total.Add(new Line(x1, y1, x2, y2));
             }
             tempSR.Dispose();
             return total;
         }
-        public static void returnTriangles(List<double[][]> triangles)
-        {            
+        private static List<double[][]> GetTriangles (List<Line> lines)
+        {
+            List<double[][]> triangles = new List<double[][]>();
+            for (int i = 0; i < lines.Count() - 2; i++)
+            {
+                for (int j = i + 1; j < lines.Count() - 1; j++)
+                {
+                    for (int k = j + 1; k < lines.Count(); k++)
+                    {
+                        Line[] currentLines = new Line[3] { lines[i], lines[j], lines[k] };
+                        double[][] currentSharedPoints = new double[3][]
+                        {
+                            currentLines[0].SingleSharedPoint(currentLines[1]),
+                            currentLines[0].SingleSharedPoint(currentLines[2]),
+                            currentLines[1].SingleSharedPoint(currentLines[2])
+                        };
+                        bool validTriangle = true;
+                        foreach (double[] d in currentSharedPoints)
+                        {
+                            if (d.Count() != 2)
+                            {
+                                validTriangle = false;
+                            }
+                        }
+
+                        if (validTriangle && TriangleHasCorners(currentSharedPoints))
+                        {
+                            double[][] triangle = new double[3][]
+                            {
+                                new double[2] { currentSharedPoints[0][0], currentSharedPoints[0][1] },
+                                new double[2] { currentSharedPoints[1][0], currentSharedPoints[1][1] },
+                                new double[2] { currentSharedPoints[2][0], currentSharedPoints[2][1] }
+                            };
+                            triangles.Add(triangle);
+
+                        }
+                    }
+                }
+            }
+            return triangles;
+        }
+
+        public static void ReturnTriangles(List<double[][]> triangles)
+        {
             Console.WriteLine(triangles.Count());
             foreach (double[][] triangle in triangles)
             {
@@ -101,9 +106,9 @@ namespace BwInf_36._1._3
                 Console.Write("\n");
             }
         }
-        public static void returnTriangles(List<double[][]> triangles, string path)
+        public static void ReturnTriangles(List<double[][]> triangles, string path)
         {
-            returnTriangles(triangles);
+            ReturnTriangles(triangles);
             string[] splitPath = path.Split('.');
             splitPath[splitPath.Count() - 2] += "-output";
             path = "";
@@ -129,6 +134,15 @@ namespace BwInf_36._1._3
             tempSW.Dispose();
             Console.WriteLine();
             Console.WriteLine("The results were saved in " + path);
+        }
+
+        // - true if none of the points are identical
+        private static bool TriangleHasCorners(double[][] sharedPoints)
+        {
+            if (sharedPoints[0][0] == sharedPoints[1][0] && sharedPoints[0][1] == sharedPoints[1][1]) { return false; }
+            if (sharedPoints[0][0] == sharedPoints[2][0] && sharedPoints[0][1] == sharedPoints[2][1]) { return false; }
+            if (sharedPoints[1][0] == sharedPoints[2][0] && sharedPoints[1][1] == sharedPoints[2][1]) { return false; }
+            return true;
         }
     }
 }

@@ -8,12 +8,12 @@ namespace BwInf
 {
     public class Task1 : Grid
     {
-        public Task1(Display activeForm, int pawnCount, int delay) : base(activeForm)
+        // Constructor
+
+        public Task1(Form1 activeForm, int pawnCount, int delay) : base(activeForm)
         {
             int[,] values = new int[8, 8];
             Random rnd = new Random();
-
-
             Point rook = new Point(rnd.Next(2, 7), rnd.Next(0, 7));
             for (int i = 0; i < 64; i++)
             {
@@ -37,96 +37,48 @@ namespace BwInf
             NextMove();
         }
 
-        public int delay = 0;
-        public List<Move> Moves = new List< Move>();
-        private string NextTurn = "white";
+        // Properties
 
-        private  Point BlackPosition()
+        public int delay = 0;
+        public List<Move> Moves = new List<Move>();
+
+        private string varNextTurn = "white";
+        private string NextTurn
         {
-            for (int i = 0; i < 64; i++)
-            {
-                if (this.Values[i / 8, i % 8] == 2)
-                {
-                    return new Point(i / 8, i % 8);
-                }
-            }
-            throw new Exception();
+            get { return varNextTurn; }
+            set { varNextTurn = value; }
         }
+
+
+
+
+        // Methods 
+
         private Move BestBlackMove()
         {
-            List< Point> idealPositions = IdealBlackPositions();
-             Point blackPosition = BlackPosition();
-            List<Move> possibleMoves = PossibleBlackMoves();
+            List<Point> idealPositions = IdealBlackPositions();
             int best = 0;
-            for (int i = 0; i < possibleMoves.Count(); i++)
+            for (int i = 0; i < PossibleBlackMoves.Count(); i++)
             {
-                if (possibleMoves[i].Target.y >= possibleMoves[best].Target.y)
+                if (PossibleBlackMoves[i].Target.y >= PossibleBlackMoves[best].Target.y)
                 {
                     best = i;
                 }
-                foreach ( Point id in idealPositions)
+                foreach (Point id in idealPositions)
                 {
-                    if (possibleMoves[i].Target.y == id.y && possibleMoves[i].Target.x == id.x)
+                    if (PossibleBlackMoves[i].Target.y == id.y && PossibleBlackMoves[i].Target.x == id.x)
                     {
-                        return possibleMoves[i];
+                        return PossibleBlackMoves[i];
                     }
                 }
             }
-            return possibleMoves[best];
-        }        
-        private List<Move> PossibleBlackMoves()
-        {
-             Point blackPosition = BlackPosition();
-            List<Move> possibleMoves = new List<Move>();
-            for (int i = blackPosition.y; i < 8; i++)
-            {
-                if (this.Values[i, blackPosition.x] == 1)
-                {
-                    break;
-                }
-                else
-                {
-                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
-                }
-            }
-            for (int i = blackPosition.y; i > 8; i--)
-            {
-                if (this.Values[i, blackPosition.x] == 1)
-                {
-                    break;
-                }
-                else
-                {
-                    possibleMoves.Add(new Move(blackPosition, new Point(i, blackPosition.x)));
-                }
-            }
-            for (int i = blackPosition.x; i < 8; i++)
-            {
-                if (this.Values[blackPosition.y, i] == 1)
-                {
-                    break;
-                }
-                else
-                {
-                    possibleMoves.Add(new  Move(blackPosition, new Point(blackPosition.y, i)));
-                }
-            }
-            for (int i = blackPosition.x; i > 8; i--)
-            {
-                if (this.Values[blackPosition.y, i] == 1)
-                {
-                    break;
-                }
-                else
-                {
-                    possibleMoves.Add(new  Move(blackPosition, new Point(blackPosition.y, i)));
-                }
-            }
-            return possibleMoves;
+            return PossibleBlackMoves[best];
         }
-        private List< Point> IdealBlackPositions()
+
+
+        private List<Point> IdealBlackPositions()
         {
-            List< Point> total = new List< Point>();
+            List<Point> total = new List<Point>();
             int[] emptyInX = new int[8];
             int[] emptyInY = new int[8];
             for (int i = 0; i < 64; i++)
@@ -152,22 +104,11 @@ namespace BwInf
             return total;
         }
 
-        private List< Point> WhitePositions()
-        {
-            List< Point> total = new List< Point>();
-            for (int i = 0; i < 64; i++)
-            {
-                if (this.Values[i / 8, i % 8] == 1)
-                {
-                    total.Add(new Point(i / 8, i % 8));
-                }
-            }
-            return total;
-        }
+
         private Move BestWhiteMove()
         {
             int last = 0;
-            List< Point> whitePositions = WhitePositions();
+            List<Point> whitePositions = WhitePositions;
             for (int i = 0; i < whitePositions.Count(); i++)
             {
                 if (whitePositions[last].y > whitePositions[i].y)
@@ -177,68 +118,24 @@ namespace BwInf
             }
             return new Move(whitePositions[last], new Point(whitePositions[last].y + 1, whitePositions[last].x));
         }
-        private List<Move> PossibleWhiteMove()
-        {
-            List< Point> whitePositions = WhitePositions();
-            List<Move> possibleMoves = new List<Move>();
-            for (int i = 0; i < whitePositions.Count(); i++)
-            {
-                int y = i / 8;
-                int x = i % 8;
-                if (y == 0)
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y + 1, x)));
-                }
-                else if (y == 7)
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y - 1, x)));
-                }
-                else
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y + 1, x)));
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y - 1, x)));
-                }
-                if (x == 0)
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x + 1)));
-                }
-                else if (x == 7)
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x - 1)));
 
-                }
-                else
-                {
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x + 1)));
-                    possibleMoves.Add(new  Move(whitePositions[i], new Point(y, x - 1)));
-                }
-            }
-            return possibleMoves;
-        }
 
         private void NextMove()
         {
-            if (!this.ActiveForm.stop)
+            if (NextTurn == "white")
             {
-                if (NextTurn == "white")
-                {
-                    NextTurn = "black";
-                    Console.WriteLine(this.Move(BestWhiteMove()).move);
-                }
-                else
-                {
-                    NextTurn = "white";
-                    Console.WriteLine(this.Move(BestBlackMove()).move);
-                }
-                if (!this.GameOver)
-                {
-                    System.Threading.Thread.Sleep(delay);
-                    NextMove();
-                }
+                NextTurn = "black";
+                Console.WriteLine(this.Move(BestWhiteMove()).move);
             }
             else
             {
-                this.ActiveForm.stop = false;
+                NextTurn = "white";
+                Console.WriteLine(this.Move(BestBlackMove()).move);
+            }
+            if (!this.GameOver)
+            {
+                System.Threading.Thread.Sleep(delay);
+                NextMove();
             }
         }
     }

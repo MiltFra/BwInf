@@ -9,6 +9,8 @@ using System.Diagnostics;
 
 namespace BwInf_36._1._1
 {
+    // DISCLAIMER: you might not be satisfied with the kind of comentary in this file
+    // if you are looking for something truly serious you might want to contact me (vrelda@outlook.de) or look into the documentation
     public class Program
     {
         static int rawCount = 0;

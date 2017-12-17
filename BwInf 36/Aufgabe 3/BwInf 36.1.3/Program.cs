@@ -21,6 +21,7 @@ namespace BwInf
             Console.WriteLine();
             Console.ReadKey();
         }
+        // getting the path from the user with file dialogs
         private static string Path()
         {
             string path = "";
@@ -33,6 +34,7 @@ namespace BwInf
             Console.WriteLine();
             return path;
         }
+        // getting the stuff we need to process from the given path
         private static List<Line> GetLines(string path)
         {
             StreamReader tempSR = new StreamReader(path);
@@ -52,22 +54,28 @@ namespace BwInf
             tempSR.Dispose();
             return total;
         }
+        // finding all the triangles in the given data
         private static List<double[][]> GetTriangles (List<Line> lines)
         {
+            // a list of triangles (double[][] is for 3 points with 2 coordinates each)
             List<double[][]> triangles = new List<double[][]>();
+            // we are cycling through all the possiblities of combining three different lines in no particular order
             for (int i = 0; i < lines.Count() - 2; i++)
             {
                 for (int j = i + 1; j < lines.Count() - 1; j++)
                 {
                     for (int k = j + 1; k < lines.Count(); k++)
                     {
+                        // we store our combination for easy access
                         Line[] currentLines = new Line[3] { lines[i], lines[j], lines[k] };
+                        // now we need the intersections of those lines
                         double[][] currentSharedPoints = new double[3][]
                         {
                             currentLines[0].SingleSharedPoint(currentLines[1]),
                             currentLines[0].SingleSharedPoint(currentLines[2]),
                             currentLines[1].SingleSharedPoint(currentLines[2])
                         };
+                        // if a point of those three above has a number of coordinates unequal to two, we know something is wrong
                         bool validTriangle = true;
                         foreach (double[] d in currentSharedPoints)
                         {
@@ -76,7 +84,7 @@ namespace BwInf
                                 validTriangle = false;
                             }
                         }
-
+                        // if nothing is wrong and none of the two corners have identical coordinates, we can finally at the triangle to the total
                         if (validTriangle && TriangleHasCorners(currentSharedPoints))
                         {
                             double[][] triangle = new double[3][]

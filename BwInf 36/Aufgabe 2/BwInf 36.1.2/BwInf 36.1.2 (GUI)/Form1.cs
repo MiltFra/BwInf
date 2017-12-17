@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 namespace BwInf_36._1._2__GUI_
 {
+    // DISCLAIMER: This commetary of the code at hand might not be serious enough or well stuctured enough
+    // if you are looking for that you might want to contact me at vrelda@outlook.de or look into the documenation
     public partial class Form1 : Form
     {
         Offer[] BadOffers = new Offer[4] { new Offer(new List<string>(), -1), new Offer(new List<string>(), -1), new Offer(new List<string>(), -1), new Offer(new List<string>(), -1) };
@@ -245,6 +247,7 @@ namespace BwInf_36._1._2__GUI_
             }
             else { return new Offer(new List<string>(), -1); }
         }
+        // adding single prices for all the children and adults... MAGIC :D
         private static Offer OnlySinglePrices(int children, int adults)
         {
             List<string> total = new List<string>();
@@ -260,6 +263,8 @@ namespace BwInf_36._1._2__GUI_
         }
 
         static List<((int children, int adults) input, Offer output)> calculatedPricesWE = new List<((int children, int adults) input, Offer output)>();
+        // you will have to take this function for what it is, it's nothing special really.
+        // you can calculate that stuff yourself if you want ^^
         private static Offer FixedPricesDuringWeekEnd(int children, int adults)
         {
             if ((adults >= 2 && children >= 2) || (adults >= 1 && children >= 3))
@@ -356,6 +361,8 @@ namespace BwInf_36._1._2__GUI_
         }
 
         static List<((int children, int adults) input, Offer output)> calculatedPricesW = new List<((int children, int adults) input, Offer output)>();
+        // you will have to take this function for what it is, it's nothing special really.
+        // you can calculate that stuff yourself if you want ^^
         private static Offer FixedPricesDuringWeek(int children, int adults)
         {
             Offer total = OnlySinglePrices(children, adults);
@@ -394,6 +401,8 @@ namespace BwInf_36._1._2__GUI_
         }
         private static Offer CombinedPricesDuringWeek(int children, int adults)
         {
+            // check if that paritcular combination of children and adults has been calculated yet.
+            // if yes, return a COPY (we don't want our previous results to be changed later)
             foreach (var v in calculatedPricesW)
             {
                 if (v.input.adults == adults && v.input.children == children)
@@ -401,28 +410,45 @@ namespace BwInf_36._1._2__GUI_
                     return v.output.Clone();
                 }
             }
+            // if it hasn't been calculated yet, we need to do it now
+            // only single prices is the worst option, but it's an option... so we take this as our starting point
             Offer best = OnlySinglePrices(children, adults);
+            // if there are not more than 6 persons, we can take the static values
             if (children + adults > 6)
             {
+                // if not, we have to cycle through the total person counts from 1 to 6
                 for (int i = 1; i <= 6 && i <= children + adults; i++)
                 {
+                    // and how many of them are children / adults
                     for (int j = 0; j <= i && j <= children; j++)
                     {
+                        // if (for some reason) the count of the persons that aren't children
+                        // is bigger than the adult count, it's impossible to calculate...
                         if (adults - (i - j) >= 0)
                         {
+                            // now we have to calculate the fixed part with the current combination
                             Offer part1 = FixedPricesDuringWeek(j, i - j);
+                            // and the rest will be put into the current method as well
                             Offer part2 = CombinedPricesDuringWeek(children - j, adults - (i - j));
+                            // if the combination of the two is better than the previous best, 
+                            // we take that one as our new best
                             if (part1.Price + part2.Price < best.Price)
                             {
+                                // put the tickets into one single list
                                 part1.Tickets.AddRange(part2.Tickets);
+                                // and create the offer with those values
                                 best = new Offer(part1.Tickets, part1.Price + part2.Price);
                             }
                         }
                     }
                 }
             }
+            // for person counts of 6 or less, we can take the static values
             else { best = FixedPricesDuringWeek(children, adults); }
+            // now that we calculated something, we have to store a copy of it 
+            // so that we remember it the next time we have to calculate the same thing
             calculatedPricesW.Add(((children, adults), new Offer(best.Tickets, best.Price)));
+            // and we have to return it
             return best;
         }
 
@@ -432,6 +458,9 @@ namespace BwInf_36._1._2__GUI_
         {
 
         }
+
+        // just random GUI stuff
+
         private void addPerson(int age)
         {
             if (age > 16)

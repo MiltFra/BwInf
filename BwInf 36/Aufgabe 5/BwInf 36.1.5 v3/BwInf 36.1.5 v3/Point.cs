@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BwInf
 {
-    public class Point
+    // Just two coordinates, could as well be described as (int y, int x)
+    public class Point : IEquatable<Point>
     {
         public Point(int y, int x)
         {
@@ -15,5 +16,15 @@ namespace BwInf
         }
         public int y { get; set; }
         public int x { get; set; }
+
+        public bool Equals(Point other)
+        {
+            if (this.y != other.y) return false;
+            if (this.x != other.x) return false;
+            return true;
+        }
+
+        // - When the coordinates are outside the given Grid
+        public bool IsOutsideGrid() { return y < 0 || x < 0 || y > 7 || x > 7; }
     }
 }

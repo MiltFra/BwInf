@@ -23,7 +23,6 @@ namespace BwInf
                 bt_Task2.Enabled = !value;
                 bt_Task3.Enabled = !value;
                 bt_Task4.Enabled = !value;
-                bt_Test.Enabled = !value;
             }
         }
 
@@ -36,11 +35,8 @@ namespace BwInf
 
         }
         private void bt_Task1_Click(object sender, EventArgs e)
-        {
-            Display display = new Display();
-            display.Show();
+        {            
             Running = true;
-            Console.WriteLine("Starte Aufgabe 1 [8 Bauern, 1 Turm]");
             int delay = 0;
             try
             {
@@ -50,14 +46,11 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task1 task = new Task1(display, 8, delay);
-            display.Dispose();
+            Task1 task = new Task1(this, 8, delay);
             Running = false;
         }
         private void bt_Task2_Click(object sender, EventArgs e)
         {
-            Display display = new Display();
-            display.Show();
             Running = true;
             Console.WriteLine("Starte Aufgabe 2 [7 Bauern, 1 Turm]");
             int delay = 0;
@@ -69,8 +62,6 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task2 task = new Task2(display, 7, delay);
-            display.Dispose();
             Running = false;
         }
 
@@ -81,11 +72,11 @@ namespace BwInf
 
         private void bt_Task3_Click(object sender, EventArgs e)
         {
-            Display display = new Display();
-            display.Show();
             Running = true;
             Console.WriteLine("Starte Aufgabe 2 [7 Bauern, 1 Turm]");
             int delay = 0;
+            int k = 0;
+            int l = 0;
             try
             {
                 delay = Convert.ToInt32(tb_delay.Text);
@@ -94,7 +85,23 @@ namespace BwInf
             {
                 delay = 10;
             }
-            Task3 task = new Task3(display, 7, delay, 16, 1);
+            try
+            {
+                k = Convert.ToInt32(tb_K.Text);
+            }
+            catch
+            {
+                k = 7;
+            }
+            try
+            {
+                l = Convert.ToInt32(tb_L.Text);
+            }
+            catch
+            {
+                l = 2;
+            }
+            Task3 task = new Task3(this, 7, delay, k, l);
             Running = false;
         }
 
@@ -111,7 +118,12 @@ namespace BwInf
                     { 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0 } },
                 new Point(0, 0), new Point(7, 7));
-            List< Point> path = pf.findPath();
+            List< Point> path = pf.FindPath();
+        }
+
+        private void tb_K_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

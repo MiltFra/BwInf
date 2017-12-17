@@ -1,0 +1,18 @@
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe.config
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.pdb
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.csprojResolveAssemblyReference.cache
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.exe
+C:\Users\vreld\documents\visual studio 2017\Projects\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.pdb
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe.config
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.pdb
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.csprojResolveAssemblyReference.cache
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.exe
+D:\Projects\BwInf\BwInf 36.1.3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.pdb
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe.config
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.exe
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\bin\Debug\BwInf 36.1.3.pdb
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.csprojResolveAssemblyReference.cache
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.exe
+H:\Projects\BwInf\BwInf 36\Aufgabe 3\BwInf 36.1.3\obj\Debug\BwInf 36.1.3.pdb

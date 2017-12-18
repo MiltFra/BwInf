@@ -1,5 +1,2 @@
-*.txt
-*.docx
-*.pdf
-*\Anhang\*
+*/Anhang/*
 *\.vs\*

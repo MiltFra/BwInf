@@ -1,0 +1,34 @@
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe.config
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).pdb
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csprojResolveAssemblyReference.cache
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Form1.resources
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Properties.Resources.resources
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csproj.GenerateResource.Cache
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).exe
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).pdb
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.dll
+H:\Projects\BwInf\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.xml
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe.config
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).pdb
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.dll
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.xml
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csprojResolveAssemblyReference.cache
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Form1.resources
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Properties.Resources.resources
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csproj.GenerateResource.Cache
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csproj.CoreCompileInputs.cache
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).exe
+D:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).pdb
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe.config
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).exe
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\BwInf 36.1.2 (GUI).pdb
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.dll
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\bin\Debug\System.ValueTuple.xml
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csprojResolveAssemblyReference.cache
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Form1.resources
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf_36._1._2__GUI_.Properties.Resources.resources
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).csproj.GenerateResource.Cache
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).exe
+H:\Projects\BwInf\BwInf 36\Aufgabe 2\BwInf 36.1.2 (GUI)\BwInf 36.1.2 (GUI)\obj\Debug\BwInf 36.1.2 (GUI).pdb
